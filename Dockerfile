@@ -9,4 +9,4 @@ USER root
 ADD . .
 #RUN deno cache mod.ts
 
-CMD ["run", "--allow-net", "--allow-read", "mod.ts"]
+CMD ["run", "--allow-env", "--allow-net", "--allow-read", "mod.ts"]

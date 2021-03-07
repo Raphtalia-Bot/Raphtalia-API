@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/", async function (req: Request, res): Promise<Response> {
     // @ts-ignore
-    return res.send(await Account.getAccount(req.user.id));
+    return res.setStatus(200).json(await Account.getAccount(req.user.id));
 });
 
 router.patch("/", async function (req: Request, res): Promise<Response> {

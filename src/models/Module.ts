@@ -21,10 +21,12 @@ export default new class {
         if(userId !== DBModule.owner) DBModule.address = null;
         return DBModule;
     }
-    async getModules(): Promise<Module[]> {
+    async getModules(userId?: string): Promise<Module[]> {
         const DBModules = await Module.all();
         DBModules.forEach(module => {
-            module.address = null;
+            if(userId !== module.owner) {
+                module.address = null;
+            }
         });
         return DBModules;
     }

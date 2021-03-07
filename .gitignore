@@ -44,3 +44,4 @@ modules.xml
 .idea/misc.xml
 *.ipr
 .idea/sonarlint
+*.ps1
