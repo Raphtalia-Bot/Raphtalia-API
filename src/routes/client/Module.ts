@@ -4,14 +4,27 @@ import Module from "../../models/Module.ts";
 
 const router = Router();
 
-router.get("/", async function (req: Request, res): Promise<Response> {
+router.get("/", async function(req: Request, res): Promise<Response> {
+    return res.setStatus(200).json({ modules: await Module.getModules() });
+})
+
+router.get("/:moduleId", async function (req: Request, res): Promise<Response> {
     // @ts-ignore
-    return res.json(await Module.getModule(req.module.id));
+    const { id } = req.user;
+    const moduleId = req.params.moduleId;
+    return res.setStatus(200).json(await Module.getModule(moduleId, id));
 });
 
-router.put("/", async function (req, res): Promise<Response> {
-    const { name, description, owner } = req.body;
-    return res.json(await Module.createModule(name, description, owner, "127.0.0.1:24495"));
+router.post("/", async function (req: Request, res): Promise<Response> {
+    // @ts-ignore
+    const { id } = req.user;
+    const { name, description, address } = req.body;
+    if(/(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$/.test(address)) {
+        if((await fetch(address)).status === 200) {
+            return res.setStatus(201).json(await Module.createModule(name, description, id, address));
+        }
+    }
+    return res.sendStatus(400);
 });
 
 export default router;

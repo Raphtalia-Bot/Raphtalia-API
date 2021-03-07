@@ -15,11 +15,18 @@ export class Module extends Model {
     };
 }
 
-
-
 export default new class {
-    async getModule(id: string): Promise<Module> {
-        return await Module.find(id);
+    async getModule(id: string, userId?: string): Promise<Module> {
+        const DBModule = await Module.find(id);
+        if(userId !== DBModule.owner) DBModule.address = null;
+        return DBModule;
+    }
+    async getModules(): Promise<Module[]> {
+        const DBModules = await Module.all();
+        DBModules.forEach(module => {
+            module.address = null;
+        });
+        return DBModules;
     }
     async createModule(name: string, description: string, owner: string, address: string): Promise<Module> {
         return await Module.create({

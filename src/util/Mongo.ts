@@ -13,4 +13,4 @@ const database = new Database({connector:
 import { Module } from "../models/Module.ts";
 import { Account } from "../models/Account.ts";
 database.link([Module, Account]);
-database.sync({ drop: true });
+database.sync();
